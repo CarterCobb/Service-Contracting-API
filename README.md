@@ -4,7 +4,7 @@ Built by Carter J. Cobb
 
 ## Details
 
-This project uses Node.js, Express.js and MongoDB to build a lawn care bussiness API. Requirements this project satifies are as follows:
+This project uses Node.js, Express.js and MongoDB to build a lawn care business API. Requirements this project satifies are as follows:
 
 ### Business Requirements
 
