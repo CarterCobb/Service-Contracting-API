@@ -42,6 +42,7 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
   * DATABASE_URL=[your MongoDB Connection string]
   * EMAIL_USERNAME=[nodemailer email username]
   * EMAIL_PASS=[nodemailer email password]
+  * FROM_EMAIL=[email to send from]
 
 ### Run
 
