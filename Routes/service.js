@@ -8,7 +8,7 @@ import { urlPrefix, generateLinks } from "../Helpers/functions.js";
 import { PORT } from "../app.js";
 import { sendDatabaseError, sendError } from "../Helpers/exception-handlers.js";
 import eHATEOAS from "../Helpers/eHATEOAS.js";
-const { ALL, CLAIM, COMPLETE, POST, PUT } = eHATEOAS;
+const { ALL, CLAIM, COMPLETE, POST } = eHATEOAS;
 
 /**
  * Array prototype to get the last element of an array
