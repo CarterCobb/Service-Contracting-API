@@ -1,6 +1,9 @@
 import mail from "nodemailer";
 const { createTransport } = mail;
 import { EMAIL_PASS, EMAIL_USERNAME, FROM_EMAIL } from "./KEYS.js";
+import fs from "fs";
+import { promisify } from "util";
+const readFile = promisify(fs.readFile);
 
 /**
  * Sends an email
@@ -11,7 +14,9 @@ import { EMAIL_PASS, EMAIL_USERNAME, FROM_EMAIL } from "./KEYS.js";
  * @return {Object} {message: "message"} on success
  * @return {Object} {error: "description"} on fail
  */
-export const sendEmail = async (to, subject, text) => {
+export const sendEmail = async (to, subject, new_password) => {
+  var html = await readFile("./Models/email.html", "utf8")
+  html = html.replace("[new_password]", new_password);
   var transporter = createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -27,7 +32,7 @@ export const sendEmail = async (to, subject, text) => {
       replyTo: `${FROM_EMAIL}`,
       to,
       subject,
-      text,
+      html,
     })
     .catch((err) => {
       return { error: err.message };
