@@ -75,8 +75,18 @@ const routes = [
             req.body.password,
             bcrypt.genSaltSync(10)
           );
-          await User.create(req.body);
-          return res.sendStatus(201);
+          const user = await User.create(req.body);
+          delete user.password;
+          return res.status(201).json({
+            _embedded: user,
+            _links: generateLinks(user, req.url, "user", [
+              ALL,
+              DELETE,
+              PATCH,
+              POST,
+              PUT,
+            ]),
+          });
         } catch (err) {
           return sendError(400, req, res, err, "BAD_REQUEST");
         }

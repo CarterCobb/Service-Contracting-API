@@ -12,7 +12,7 @@ const { ALL, CLAIM, COMPLETE, POST } = eHATEOAS;
 
 /**
  * Array prototype to get the last element of an array
- * 
+ *
  * @return {Object} last element of array 'this'
  */
 Array.prototype.last = function () {
@@ -114,8 +114,15 @@ const routes = [
           try {
             req.body.requestor = `${urlPrefix}:${PORT}/api/user/${req.user._id}`;
             req.body.status = "OPEN";
-            await Service.create(req.body);
-            return res.sendStatus(201);
+            const service = await Service.create(req.body);
+            return res.status(201).json({
+              _embedded: service,
+              _links: generateLinks(service, req.url, "service", [
+                ALL,
+                CLAIM,
+                COMPLETE,
+              ]),
+            });
           } catch (err) {
             return sendError(500, req, res, err, "SERVER_ERROR");
           }
@@ -201,15 +208,13 @@ const routes = [
                   { upsert: false, new: true }
                 );
                 // TODO - links
-                return res
-                  .status(200)
-                  .json({
-                    _embedded: completed,
-                    _links: generateLinks(completed, req.url, "service", [
-                      ALL,
-                      POST,
-                    ]),
-                  });
+                return res.status(200).json({
+                  _embedded: completed,
+                  _links: generateLinks(completed, req.url, "service", [
+                    ALL,
+                    POST,
+                  ]),
+                });
               } else {
                 return sendError(
                   403,
