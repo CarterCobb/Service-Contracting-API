@@ -210,22 +210,12 @@ const routes = [
   {
     url: "/api/user/:id/request-new-pass",
     type: eRequestType.POST,
-    handler: authenticateUser,
-    callback: async (req, res) => {
-      if (req.user.role !== "ADMIN" && req.user._id != req.params.id) {
-        return sendError(
-          403,
-          req,
-          res,
-          { message: "Cannot request passwod reset for other users." },
-          "FORBIDDEN"
-        );
-      }
+    handler: async (req, res) => {
       if (connection.readyState === 1) {
         try {
           const new_pass = Date.now().toString(16);
           const send = await sendEmail(
-            req.user.email,
+            req.query.email,
             "🔒 Password Reset - Lawn Care API",
             new_pass
           );

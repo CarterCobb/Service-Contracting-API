@@ -33,7 +33,6 @@ export const authenticateUser = async (req, res, next) => {
       .pop(),
   };
   if (connection.readyState === 1) {
-    var admin = null;
     var user = null;
     try {
       user = await User.findOne({ email: creds.email });
