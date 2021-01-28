@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  api:
+    container_name: lawn-care-api
+    restart: always
+    build: .
+    ports: 
+      - "1000:1000"
+    links:
+      - mongo
+    volumes: 
+      - ${HOST_PATH}://usr/src/app:ro
+      - /usr/src/app/node_modules/
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports: 
+      - "27017:27017"
