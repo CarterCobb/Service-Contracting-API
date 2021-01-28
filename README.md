@@ -39,10 +39,11 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 * add a `.env` file in the root directory.
 * .env file keys:
   * PORT=1000
-  * DATABASE_URL=[your MongoDB Connection string]
+  * DATABASE_URL=[your MongoDB Connection string ( for Docker this will be mongodb://mongo:27017/~your database name~ )]
   * EMAIL_USERNAME=[nodemailer email username]
   * EMAIL_PASS=[nodemailer email password]
   * FROM_EMAIL=[email to send from]
+  * `Docker (optional)`: HOST_PATH=~/path/to/local/directory
 
 ### Run
 
