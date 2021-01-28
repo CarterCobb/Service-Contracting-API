@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { connection } = mongoose;
 import { User } from "../Models/user.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { sendDatabaseError, sendError } from "../Helpers/exception-handlers.js";
 
 /**

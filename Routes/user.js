@@ -2,7 +2,7 @@ import { eRequestType } from "../Helpers/eRequestType.js";
 import mongoose from "mongoose";
 const { connection } = mongoose;
 import { User } from "../Models/user.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { authenticateUser } from "../Helpers/auth.js";
 import { sendError, sendDatabaseError } from "../Helpers/exception-handlers.js";
 import eHATEOAS from "../Helpers/eHATEOAS.js";
