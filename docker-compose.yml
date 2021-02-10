@@ -2,31 +2,22 @@ version: "3"
 
 services:
   api:
-    container_name: lawn-care-api_1
-    image: lab1-lawncareapi_api
+    image: lawncareapi_api
     restart: always
     build: .
-    ports: 
-      - "1000:1000"
     links:
       - mongo
     volumes: 
       - ${HOST_PATH}://usr/src/app:ro
       - /usr/src/app/node_modules/
-  api1:
-    container_name: lawn-care-api_2
-    image: lab1-lawncareapi_api
-    restart: always
-    build: .
-    ports: 
-      - "1001:1000"
-    links:
-      - mongo
-    volumes: 
-      - ${HOST_PATH}://usr/src/app:ro
-      - /usr/src/app/node_modules/
+    deploy:
+      replicas: 2
+    ports:
+      - "1000-1001:1000"
   mongo:
     container_name: mongo
     image: mongo
     ports: 
       - "27017:27017"
+    volumes: 
+      - ${HOST_PATH}/data://data/db
