@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  api:
-    image: lawncareapi_api
+  lawncare:
+    image: lawncare
     restart: always
     build: .
     links:
@@ -14,10 +14,28 @@ services:
       replicas: 2
     ports:
       - "1000-1001:1000"
+    networks:
+      - lawn-care-api-network
   mongo:
     container_name: mongo
-    image: mongo
+    image: mongo:latest
     ports: 
       - "27017:27017"
     volumes: 
       - ${HOST_PATH}/data://data/db
+    networks:
+      - lawn-care-api-network
+  nginx:
+    image: nginx:latest
+    container_name: nginx-load-balancer
+    volumes: 
+      - ${HOST_PATH}/nginx-conf:/etc/nginx/conf.d
+    depends_on: 
+      - lawncare
+    ports:
+      - 9090:9090
+    networks:
+      - lawn-care-api-network
+networks:
+  lawn-care-api-network:
+    external: false

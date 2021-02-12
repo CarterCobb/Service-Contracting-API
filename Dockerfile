@@ -1,5 +1,5 @@
 # Bring in Node.js
-FROM node:latest
+FROM node
 
 # Set working directory
 WORKDIR /usr/src/app
