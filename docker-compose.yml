@@ -1,8 +1,7 @@
-version: "3"
+version: "3.9"
 
 services:
-  lawncare:
-    image: lawncare
+  api:
     restart: always
     build: .
     links:
@@ -31,11 +30,24 @@ services:
     volumes: 
       - ${HOST_PATH}/nginx-conf:/etc/nginx/conf.d
     depends_on: 
-      - lawncare
+      - api
     ports:
       - 9090:9090
     networks:
       - lawn-care-api-network
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes: 
+      - ${HOST_PATH}/rabbitmq/data:/var/lib/rabbitmq/mnesia
+    ports: 
+      - 5672:5672
+      - 9091:15672
+    networks: 
+      - lawn-care-api-network
 networks:
   lawn-care-api-network:
+    name: lawn-care-api-network
     external: false

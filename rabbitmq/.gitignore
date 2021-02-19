@@ -1,0 +1,4 @@
+data/rabbit@rabbitmq
+data/rabbit@rabbitmq-plugins-expand
+data/rabbit@rabbitmq-feature_flags
+data/rabbit@rabbitmq.pid
