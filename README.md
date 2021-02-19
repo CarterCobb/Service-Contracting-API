@@ -46,7 +46,7 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
   - EMAIL_PASS=[nodemailer email password]
   - FROM_EMAIL=[email to send from]
   - `Docker (optional)`: HOST_PATH=~/path/to/local/directory
-  - `RabbitMQ (optional)`: RABBITMQ_QUEUE=lawncareapi.quere
+  - `RabbitMQ (optional)`: RABBITMQ_QUEUE=lawncareapi.queue
   - `RabbitMQ (optional)`: RABBITMQ_EXCHANGE=lawncareapi.exchange
   - `RabbitMQ (optional)`: RABBITMQ_ROUTING_KEY=lawncare.routingKey
   - `RabbitMQ (optional)`: RABBITMQ_HOST=rabbitmq:5672
