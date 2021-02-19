@@ -38,12 +38,20 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 - Run `npm install`
 - add a `.env` file in the root directory.
 - .env file keys:
-  - PORT=[1000 (for Docker use 9090 as this will reach the load balancer.)]
+  - PORT=1000
+  - DOCKER_PORT=9090
+  - USE_DOCKER=[set to `true` is using docker or `false` if not]
   - DATABASE_URL=[your MongoDB Connection string ( for Docker this will be mongodb://mongo:27017/your database name )]
   - EMAIL_USERNAME=[nodemailer email username]
   - EMAIL_PASS=[nodemailer email password]
   - FROM_EMAIL=[email to send from]
   - `Docker (optional)`: HOST_PATH=~/path/to/local/directory
+  - `RabbitMQ (optional)`: RABBITMQ_QUEUE=lawncareapi.quere
+  - `RabbitMQ (optional)`: RABBITMQ_EXCHANGE=lawncareapi.exchange
+  - `RabbitMQ (optional)`: RABBITMQ_ROUTING_KEY=lawncare.routingKey
+  - `RabbitMQ (optional)`: RABBITMQ_HOST=localhost:5672
+  - `RabbitMQ (optional)`: RABBITMQ_USERNAME=user
+  - `RabbitMQ (optional)`: RABBITMQ_PASSWORD=password
 
 ### Run
 

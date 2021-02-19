@@ -1,5 +1,7 @@
-import { PORT } from "../app.js";
+import { PORT as DEFAULT_PORT } from "../app.js";
+import { USE_DOCKER, DOCKER_PORT } from "./KEYS.js";
 export const urlPrefix = "http://localhost";
+const PORT = USE_DOCKER === "true" ? DOCKER_PORT : DEFAULT_PORT;
 
 /**
  * Formats HATEOAS compliant links for responses.
