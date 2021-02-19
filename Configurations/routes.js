@@ -1,5 +1,6 @@
 import user_routes from "../Routes/user.js";
 import service_routes from "../Routes/service.js";
+import messaging_routes from "../Routes/messaging.js";
 
 /**
  * Adds the routes to the instance of the app.
@@ -7,7 +8,9 @@ import service_routes from "../Routes/service.js";
 class RouteConfig {
   constructor(instance) {
     this.app = instance;
-    this.configureRoutes(user_routes.concat(service_routes));
+    this.configureRoutes(
+      user_routes.concat(service_routes).concat(messaging_routes)
+    );
   }
 
   /**
