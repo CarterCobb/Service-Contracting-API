@@ -21,12 +21,14 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 
 ### Technical Requirements
 
-- API must be Richardson Maturity Model level 3 (HATEOAS) compliant
-- API must use HTTP Basic authentication
+- API must be Richardson Maturity Model level 3 (HATEOAS) compliant.
+- API must use HTTP Basic authentication.
 - API must use JSON as the primary data serialization mechanism.
 - Persistent data storage can be in any relational database, graph database, or document database.
 - API should handle errors by responding with an appropriate (justifiable) HTTP response code and a json body with helpful information about the error.
-- API must include a administrative user with the username 'admin' and the password 'admin'
+- API must include a administrative user with the username 'admin' and the password 'admin'.
+- Use Docker to deploy the REST API to two different nodes.
+- Use a NGINX docker node to serve as a load balancer.
 
 ## Requirements to start
 
