@@ -1,6 +1,7 @@
 import user_routes from "../Routes/user.js";
 import service_routes from "../Routes/service.js";
 import messaging_routes from "../Routes/messaging.js";
+import { USE_RABBITMQ } from "../Helpers/KEYS.js";
 
 /**
  * Adds the routes to the instance of the app.
@@ -9,7 +10,9 @@ class RouteConfig {
   constructor(instance) {
     this.app = instance;
     this.configureRoutes(
-      user_routes.concat(service_routes).concat(messaging_routes)
+      user_routes
+        .concat(service_routes)
+        .concat(USE_RABBITMQ === "true" ? messaging_routes : [])
     );
   }
 

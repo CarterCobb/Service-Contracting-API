@@ -10,6 +10,7 @@ export const FROM_EMAIL = process.env.FROM_EMAIL;
 export const DOCKER_PORT = process.env.DOCKER_PORT;
 export const USE_DOCKER = process.env.USE_DOCKER;
 // RabbitMQ
+export const USE_RABBITMQ = process.env.USE_RABBITMQ;
 export const RABBITMQ_QUEUE = process.env.RABBITMQ_QUEUE;
 export const RABBITMQ_EXCHANGE = process.env.RABBITMQ_EXCHANGE;
 export const RABBITMQ_ROUTING_KEY = process.env.RABBITMQ_ROUTING_KEY;
