@@ -58,8 +58,28 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 
 - Simply run `nodemon` in the terminal
 - To get the default Admin user run the folowing in the MongoDb shell either on your local machine or the Docker container:
-  - `use lawn-care-api`
-  - `db.users.insert({name: "Admin", email: "admin", password: "$2a$10$sCZid8ACGmCmrV0pGOXNOuDwMyU8jOQfG9vefZmf69KfmYs..i9Re", address: { address_line_1: "123 Mid O' Nowhere", address_line_2: "Apt #123", zip_code: 12345, city: "Some Place", state: "UT", country: "US"}, role: "ADMIN"})`
+
+  ```shell
+  use lawn-care-api
+  ```
+
+  ```shell
+  db.users.insert(
+    { 
+      name: "Admin",
+      email: "admin",
+      password: "$2a$10$sCZid8ACGmCmrV0pGOXNOuDwMyU8jOQfG9vefZmf69KfmYs..i9Re",
+      address: {
+        address_line_1: "123 Mid O' Nowhere",
+        address_line_2: "Apt #123",
+        zip_code: 12345,
+        city: "Some Place",
+        state: "UT",
+        country: "US"
+      },
+      role: "ADMIN"
+    })
+  ```
 
 ## Additional Details
 
