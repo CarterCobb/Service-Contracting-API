@@ -31,7 +31,7 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 ## Requirements to start
 
 - Node.js installed
-- MongoDB Atlas database with connection string
+- MongoDB Atlas/local database with connection string
 
 ### Pre Run
 
@@ -41,6 +41,7 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
   - PORT=1000
   - DOCKER_PORT=9090
   - USE_DOCKER=[set to `true` is using docker or `false` if not]
+  - USE_RABBITMQ=[set to `true` is using RabbitMQ or `false` if not]
   - DATABASE_URL=[your MongoDB Connection string ( for Docker this will be mongodb://mongo:27017/your database name )]
   - EMAIL_USERNAME=[nodemailer email username]
   - EMAIL_PASS=[nodemailer email password]
