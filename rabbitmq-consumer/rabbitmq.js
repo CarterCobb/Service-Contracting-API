@@ -6,7 +6,7 @@ import {
   RABBITMQ_ROUTING_KEY,
   RABBITMQ_USERNAME,
   USE_RABBITMQ,
-} from "../Helpers/KEYS.js";
+} from "./KEYS.js";
 import amqp from "amqplib";
 
 class RabbitMQ {
@@ -35,6 +35,7 @@ class RabbitMQ {
         RABBITMQ_EXCHANGE,
         RABBITMQ_ROUTING_KEY
       );
+      this.startLookingForMessages();
     } catch (err) {
       console.log("RabbitMQ Connection Error:", err.message);
     }
@@ -69,18 +70,23 @@ class RabbitMQ {
   }
 
   /**
-   * Sends a message to the RabbitMQ queue {RABBITMQ_QUEUE}
-   * @param {String} message
-   * @returns {boolean} if the message was sent or not
+   * Listener for new messages in the queue.
+   * Handles the message and removes it from the queue.
    */
-  async sendMessage(message) {
-    console.log("Sending message: ", message);
-    return this.channel.publish(
-      RABBITMQ_EXCHANGE,
-      RABBITMQ_ROUTING_KEY,
-      Buffer.from(message),
-      { persistant: true }
-    );
+  startLookingForMessages() {
+    this.channel.consume(RABBITMQ_QUEUE, (message) => {
+      this.onNewMessage(message.content.toString());
+      this.channel.ack(message);
+    });
+  }
+
+  /**
+   * Handles the reciving end of the messages.
+   * Logs out the message to the console.
+   * @param {String} message
+   */
+  onNewMessage(message) {
+    console.log("Recived message:", message);
   }
 }
 

@@ -55,6 +55,19 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
   - `RabbitMQ (optional)`: RABBITMQ_HOST=rabbitmq
   - `RabbitMQ (optional)`: RABBITMQ_USERNAME=user
   - `RabbitMQ (optional)`: RABBITMQ_PASSWORD=password
+  - `RabbitMQ (optional)`: RABBITMQ_CONSUMER_PORT=1002
+
+#### If Using RabbitMQ
+
+- add a `.env` file in the root of the `rabbit-consumer` directory (`./rabbitmq-consumer/.env`)
+- .env file keys:
+  - RABBITMQ_QUEUE=lawncareapi.queue
+  - RABBITMQ_EXCHANGE=lawncareapi.exchange
+  - RABBITMQ_ROUTING_KEY=lawncareapi.routingKey
+  - RABBITMQ_HOST=rabbitmq
+  - RABBITMQ_USERNAME=user
+  - RABBITMQ_PASSWORD=password
+  - RABBITMQ_CONSUMER_PORT=1002
 
 ### Run
 
