@@ -11,6 +11,8 @@ services:
       - /usr/src/app/node_modules/
     deploy:
       replicas: 2
+    depends_on: 
+      - rabbitmq
     ports:
       - "1000-1001:1000"
     networks:
