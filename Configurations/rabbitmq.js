@@ -43,7 +43,7 @@ class RabbitMQ {
   /**
    * Configures the connection to RabbitMQ.
    * This will alos log the status of the connection.
-   * @returns {BlueBird<amqp.Connection>} connection.
+   * @returns {amqp.Connection} connection.
    */
   async createConnection() {
     const config = {
