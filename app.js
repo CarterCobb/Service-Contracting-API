@@ -12,6 +12,8 @@ app.use(bodyParser.json({ limit: "50mb", extended: true }));
 
 new Routes(app);
 new Mongo();
-if (USE_RABBITMQ === "true") export const rabbit = new RabbitMQ();
+var message_queue = null;
+if (USE_RABBITMQ === "true") message_queue = new RabbitMQ();
+export const rabbit = message_queue;
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
