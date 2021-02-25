@@ -68,6 +68,9 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
   - RABBITMQ_USERNAME=user
   - RABBITMQ_PASSWORD=password
   - RABBITMQ_CONSUMER_PORT=1002
+  - EMAIL_USERNAME=[nodemailer email username]
+  - EMAIL_PASS=[nodemailer email password]
+  - FROM_EMAIL=[email to send from]
 
 ### Run
 
