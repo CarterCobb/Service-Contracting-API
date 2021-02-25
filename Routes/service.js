@@ -9,6 +9,8 @@ import { PORT } from "../app.js";
 import { sendDatabaseError, sendError } from "../Helpers/exception-handlers.js";
 import eHATEOAS from "../Helpers/eHATEOAS.js";
 const { ALL, CLAIM, COMPLETE, POST } = eHATEOAS;
+import { USE_RABBITMQ } from "../Helpers/KEYS.js";
+import { rabbit } from "../app.js";
 
 /**
  * Array prototype to get the last element of an array
@@ -115,6 +117,23 @@ const routes = [
             req.body.requestor = `${urlPrefix}:${PORT}/api/user/${req.user._id}`;
             req.body.status = "OPEN";
             const service = await Service.create(req.body);
+            if (USE_RABBITMQ === "true") {
+              const sent = rabbit.sendMessage({
+                type: "SERVICE_CREATED",
+                name: req.user.name,
+                service: req.body.service,
+                email: req.user.email,
+                subject: "Service Posted",
+              });
+              if (!sent)
+                return sendError(
+                  500,
+                  req,
+                  res,
+                  err,
+                  "Created service but failed to send email to queue."
+                );
+            }
             return res.status(201).json({
               _embedded: service,
               _links: generateLinks(service, req.url, "service", [
@@ -170,6 +189,37 @@ const routes = [
                   },
                   { upsert: false, new: true }
                 );
+                if (USE_RABBITMQ === "true") {
+                  const user_id = service.requestor.split("/")[
+                    service.requestor.split("/").length - 1
+                  ];
+                  const customer = await User.findById(user_id);
+                  if (!customer)
+                    return sendError(
+                      500,
+                      req,
+                      res,
+                      err,
+                      "No user account that matches service."
+                    );
+                  const sent = rabbit.sendMessage({
+                    type: "SERVICE_CLAIMED",
+                    user: customer.name,
+                    service: service.service,
+                    contractor: req.user.name,
+                    email_user: customer.email,
+                    email_contractor: req.user.email,
+                    subject: "Service Claimed",
+                  });
+                  if (!sent)
+                    return sendError(
+                      500,
+                      req,
+                      res,
+                      err,
+                      "Claimed but failed to send email to queue"
+                    );
+                }
                 return res.status(200).json({
                   _embedded: claimed,
                   _links: generateLinks(claimed, req.url, "service", [
@@ -207,7 +257,37 @@ const routes = [
                   },
                   { upsert: false, new: true }
                 );
-                // TODO - links
+                if (USE_RABBITMQ === "true") {
+                  const user_id = service.requestor.split("/")[
+                    service.requestor.split("/").length - 1
+                  ];
+                  const customer = await User.findById(user_id);
+                  if (!customer)
+                    return sendError(
+                      500,
+                      req,
+                      res,
+                      err,
+                      "No user account that matches service."
+                    );
+                  const sent = rabbit.sendMessage({
+                    type: "SERVICE_COMPLETED",
+                    user: customer.name,
+                    service: service.service,
+                    contractor: req.user.name,
+                    email_user: customer.email,
+                    email_contractor: req.user.email,
+                    subject: "Service Completed!",
+                  });
+                  if (!sent)
+                    return sendError(
+                      500,
+                      req,
+                      res,
+                      err,
+                      "Claimed but failed to send email to queue"
+                    );
+                }
                 return res.status(200).json({
                   _embedded: completed,
                   _links: generateLinks(completed, req.url, "service", [

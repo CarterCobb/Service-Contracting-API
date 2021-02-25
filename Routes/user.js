@@ -8,6 +8,8 @@ import { sendError, sendDatabaseError } from "../Helpers/exception-handlers.js";
 import eHATEOAS from "../Helpers/eHATEOAS.js";
 import { generateLinks } from "../Helpers/functions.js";
 import { sendEmail } from "../Helpers/email-client.js";
+import { USE_RABBITMQ } from "../Helpers/KEYS.js";
+import { rabbit } from "../app.js";
 const { ALL, DELETE, PATCH, POST, PUT } = eHATEOAS;
 
 const routes = [
@@ -134,6 +136,22 @@ const routes = [
             },
             { upsert: false, new: true }
           );
+          if (USE_RABBITMQ === "true") {
+            const sent = rabbit.sendMessage({
+              type: "PASSWORD_CHANGED",
+              name: user.name,
+              email: user.email,
+              subject: "Your Password Has Changed",
+            });
+            if (!sent)
+              return sendError(
+                400,
+                req,
+                res,
+                err,
+                "Updated but failed to send email to queue"
+              );
+          }
           return res.status(200).json({
             _embedded: user,
             _links: generateLinks(user, req.url, "user", [
@@ -187,6 +205,22 @@ const routes = [
             },
             { upsert: false, new: true }
           );
+          if (req.body.password && USE_RABBITMQ === "true") {
+            const sent = rabbit.sendMessage({
+              type: "PASSWORD_CHANGED",
+              name: user.name,
+              email: user.email,
+              subject: "Your Password Has Changed",
+            });
+            if (!sent)
+              return sendError(
+                400,
+                req,
+                res,
+                err,
+                "Updated but failed to send email to queue"
+              );
+          }
           return res.status(200).json({
             _embedded: user,
             _links: generateLinks(user, req.url, "user", [
@@ -214,13 +248,24 @@ const routes = [
       if (connection.readyState === 1) {
         try {
           const new_pass = Date.now().toString(16);
-          const send = await sendEmail(
-            req.query.email,
-            "🔒 Password Reset - Lawn Care API",
-            new_pass
-          );
-          if (send.error) {
-            return sendError(500, req, res, send.error);
+          if (USE_RABBITMQ === "true") {
+            const sent = rabbit.sendMessage({
+              type: "PASSWORD_RESET",
+              email: req.query.email,
+              subject: "🔒 Password Reset - Lawn Care API",
+              new_password: new_pass,
+            });
+            if (!sent)
+              return sendError(500, req, res, "Failed to send to RabbitMQ");
+          } else {
+            const send = await sendEmail(
+              req.query.email,
+              "🔒 Password Reset - Lawn Care API",
+              new_pass
+            );
+            if (send.error) {
+              return sendError(500, req, res, send.error);
+            }
           }
           await User.updateOne(
             { _id: req.params.id },
