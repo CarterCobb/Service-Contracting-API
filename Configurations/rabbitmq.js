@@ -70,15 +70,16 @@ class RabbitMQ {
 
   /**
    * Sends a message to the RabbitMQ queue {RABBITMQ_QUEUE}
-   * @param {String} message
+   * @param {String || Object} message
    * @returns {boolean} if the message was sent or not
    */
   async sendMessage(message) {
-    console.log("Sending message: ", message);
     return this.channel.publish(
       RABBITMQ_EXCHANGE,
       RABBITMQ_ROUTING_KEY,
-      Buffer.from(message),
+      typeof message === String
+        ? Buffer.from(message)
+        : Buffer.from(JSON.stringify(message)),
       { persistant: true }
     );
   }
