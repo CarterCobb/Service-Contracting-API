@@ -8,6 +8,10 @@ import {
   USE_RABBITMQ,
 } from "./KEYS.js";
 import amqp from "amqplib";
+import fs from "fs";
+import { promisify } from "util";
+const readFile = promisify(fs.readFile);
+import { sendEmail } from "./email-client.js";
 
 class RabbitMQ {
   constructor() {
@@ -82,11 +86,83 @@ class RabbitMQ {
 
   /**
    * Handles the reciving end of the messages.
-   * Logs out the message to the console.
+   * Logs out the message to the console if of type string.
+   * Sends an email using nodemailer with detials from stringified json if type object.
    * @param {String} message
    */
-  onNewMessage(message) {
-    console.log("Recived message:", message);
+  async onNewMessage(message) {
+    try {
+      const email = JSON.parse(message);
+      switch (email.type) {
+        case "PASSWORD_CHANGED": {
+          var html = await readFile("./emails/pass_changed.html", "utf8");
+          html = html.replace("[name]", email.name);
+          await sendEmail(email.email, email.subject, html);
+          break;
+        }
+        case "PASSWORD_RESET": {
+          var html = await readFile("./emails/pass_reset.html", "utf8");
+          html = html.replace("[new_password]", email.new_password);
+          await sendEmail(email.email, email.subject, html);
+          break;
+        }
+        case "SERVICE_CREATED": {
+          var html = await readFile("./emails/service_created.html", "utf8");
+          html = html
+            .replace("[name]", email.name)
+            .replace("[service]", email.service);
+          await sendEmail(email.email, email.subject, html);
+          break;
+        }
+        case "SERVICE_CLAIMED": {
+          var html = await readFile(
+            "./emails/service_claimed_user.html",
+            "utf8"
+          );
+          html = html
+            .replace("[user]", email.user)
+            .replace("[contractor]", email.contractor)
+            .replace("[service]", email.service);
+          await sendEmail(email.email_user, email.subject, html);
+          html = await readFile(
+            "./emails/service_claimed_contractor.html",
+            "utf8"
+          );
+          html = html
+            .replace("[contractor]", email.contractor)
+            .replace("[service]", email.service);
+          await sendEmail(email.email_contractor, email.subject, html);
+          break;
+        }
+        case "SERVICE_COMPLETED": {
+          var html = await readFile(
+            "./emails/service_completed_user.html",
+            "utf8"
+          );
+          html = html
+            .replace("[user]", email.user)
+            .replace("[contractor]", email.contractor)
+            .replace("[service]", email.service);
+          await sendEmail(email.email_user, email.subject, html);
+          html = await readFile(
+            "./emails/service_completed_contractor.html",
+            "utf8"
+          );
+          html = html
+            .replace("[contractor]", email.contractor)
+            .replace("[service]", email.service);
+          await sendEmail(email.email_contractor, email.subject, html);
+          break;
+        }
+        default:
+          throw new Error(
+            `Email type '${email.type}' is not supported. (may be fallack to string as message)`
+          );
+      }
+    } catch (err) {
+      console.log(err);
+      console.log("Recived message: ", message);
+    }
   }
 }
 
