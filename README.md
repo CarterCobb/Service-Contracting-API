@@ -101,4 +101,4 @@ This project uses Node.js, Express.js and MongoDB to build a lawn care business 
 
 ## Additional Details
 
-This was built as an assignment for a college class at Neumont College of Computer Science. You are free to use, modify, distrubite and share any or all parts of this project. Please refer to me (Carter J. Cobb) when sharing. Please do not use any part of this project in any way that would be considered plagiarism.
+This was built as an assignment for a college class at Neumont College of Computer Science. Please do not use any part of this project in any way that would be considered plagiarism.
