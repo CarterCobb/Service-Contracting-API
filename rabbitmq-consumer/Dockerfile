@@ -5,7 +5,7 @@ FROM node
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to working directory
-COPY package*.json .
+COPY package*.json ./
 
 # Update Node Package Manager to the latest version
 RUN npm install -g npm@7.5.4

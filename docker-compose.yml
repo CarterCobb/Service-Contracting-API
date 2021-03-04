@@ -13,6 +13,8 @@ services:
       replicas: 2
     depends_on:
       - rabbitmq
+      - mongo
+      - redis
     ports:
       - "1000-1001:1000"
     networks:
@@ -36,6 +38,7 @@ services:
       - "27017:27017"
     volumes:
       - ${HOST_PATH}/data://data/db
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     networks:
       - lawn-care-api-network
   nginx:
@@ -59,6 +62,20 @@ services:
     ports:
       - 5672:5672
       - 9091:15672
+    networks:
+      - lawn-care-api-network
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    restart: always
+    volumes:
+      - ${HOST_PATH}/redis/data:/data
+    environment:
+      - REDIS_REPLICATION_MODE=master
     networks:
       - lawn-care-api-network
 networks:

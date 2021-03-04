@@ -2,6 +2,17 @@ import user_routes from "../Routes/user.js";
 import service_routes from "../Routes/service.js";
 import messaging_routes from "../Routes/messaging.js";
 import { USE_RABBITMQ } from "../Helpers/KEYS.js";
+import { eRequestType } from "../Helpers/eRequestType.js";
+import { sendError } from "../Helpers/exception-handlers.js";
+import redis from "express-redis-cache";
+const cache = redis({
+  host: "redis",
+  port: 6379,
+});
+
+cache.on("error", (error) => console.log(error));
+cache.on("message", (message) => console.log("REDIS:", message));
+cache.on("connected", () => console.log("REDIS Connected"));
 
 /**
  * Adds the routes to the instance of the app.
@@ -30,7 +41,7 @@ class RouteConfig {
 
   /**
    * Takes an array of route objects and binds them to the instance of the app.
-   *
+   * Also adds Cache data to redis. If The request is not a get the cache is deleted.
    * @param {Array} routes
    */
   configureRoutes(routes) {
@@ -38,6 +49,17 @@ class RouteConfig {
       this.prop(this.app, route.type)(
         route.url,
         route.handler,
+        route.type === eRequestType.GET
+          ? cache.route(route.url.split("/")[2].replaceAll(/:[\w\s]*/gi, ""))
+          : (req, res, next) =>
+              cache.del(
+                route.url.split("/")[2].replaceAll(/:[\w\s]*/gi, ""),
+                (err, _deleted) => {
+                  if (err)
+                    return sendError(500, req, res, err, "REDIS_CACHE_ERROR");
+                  else return next();
+                }
+              ),
         route.callback
           ? route.callback
           : () => {
