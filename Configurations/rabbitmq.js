@@ -70,7 +70,13 @@ class RabbitMQ {
 
   /**
    * Sends a message to the RabbitMQ queue {RABBITMQ_QUEUE}
-   * @param {String || Object} message
+   * @param {String || Object} message 
+   * {
+      type: {String},
+      name: {String},
+      email: {String || HTML},
+      subject: {String},
+     }
    * @returns {boolean} if the message was sent or not
    */
   async sendMessage(message) {
